@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "nedb": "^1.8.0"
+  },
+  "name": "nedb-example",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {}
+}
