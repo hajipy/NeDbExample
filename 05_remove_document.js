@@ -77,59 +77,69 @@ async function setUpDatabase() {
 }
 
 (async () => {
-    const db = await setUpDatabase();
+    await new Promise(async (resolve, reject) => {
+        const db = await setUpDatabase();
 
-    // queryはfind(), findOne()と同じものが使える
-    const query = { _id: "id1" };
+        // queryはfind(), findOne()と同じものが使える
+        const query = { _id: "id1" };
 
-    // optionsについては後述
-    const options = {};
+        // optionsについては後述
+        const options = {};
 
-    // remove()はqueryに一致したドキュメントを削除する
-    db.remove(query, options, (error, numOfDocs) => {
-        if (error !== null) {
-            console.error(error);
-        }
-
-        // numOfDocsには削除した件数が返る
-        console.log(numOfDocs);
-
-        // queryに一致したドキュメントのうち1件が削除されている
-
-        db.count(query, (error2, numOfDocs2) => {
-            if (error2 !== null) {
-                console.error(error2);
+        // remove()はqueryに一致したドキュメントを削除する
+        db.remove(query, options, (error, numOfDocs) => {
+            if (error !== null) {
+                reject(error);
+                return;
             }
 
-            console.log(numOfDocs2);
+            // numOfDocsには削除した件数が返る
+            console.log(numOfDocs);
+
+            // queryに一致したドキュメントのうち1件が削除されている
+
+            db.count(query, (error2, numOfDocs2) => {
+                if (error2 !== null) {
+                    reject(error2);
+                    return;
+                }
+
+                console.log(numOfDocs2);
+
+                resolve();
+            });
         });
     });
-})();
 
-(async () => {
-    const db = await setUpDatabase();
+    await new Promise(async (resolve, reject) => {
+        const db = await setUpDatabase();
 
-    const query = { "developer.name": "Sony" };
+        const query = { "developer.name": "Sony" };
 
-    // optionsはmultiのみを受け付ける
-    // trueを指定した場合、複数のドキュメントを削除する(デフォルトはfalse)
-    const options = { multi: true };
+        // optionsはmultiのみを受け付ける
+        // trueを指定した場合、複数のドキュメントを削除する(デフォルトはfalse)
+        const options = { multi: true };
 
-    db.remove(query, options, (error, numOfDocs) => {
-        if (error !== null) {
-            console.error(error);
-        }
-
-        console.log(numOfDocs);
-
-        // queryに一致したドキュメントがすべて削除されている
-
-        db.count(query, (error2, numOfDocs2) => {
-            if (error2 !== null) {
-                console.error(error2);
+        db.remove(query, options, (error, numOfDocs) => {
+            if (error !== null) {
+                reject(error);
+                return;
             }
 
-            console.log(numOfDocs2);
+            console.log(numOfDocs);
+
+            // queryに一致したドキュメントがすべて削除されている
+
+            db.count(query, (error2, numOfDocs2) => {
+                if (error2 !== null) {
+                    reject(error2);
+                    return;
+                }
+
+                console.log(numOfDocs2);
+
+                resolve();
+            });
         });
     });
 })();

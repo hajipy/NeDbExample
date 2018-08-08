@@ -77,68 +77,83 @@ async function setUpDatabase() {
 }
 
 (async () => {
-    const db = await setUpDatabase();
+    await new Promise(async (resolve, reject) => {
+        const db = await setUpDatabase();
 
-    // filedNameで指定したフィールドにインデックスを作成する
-    const options = {
-        fieldName: "name"
-    };
+        // filedNameで指定したフィールドにインデックスを作成する
+        const options = {
+            fieldName: "name"
+        };
 
-    db.ensureIndex(options, (error) => {
-        if (error !== null) {
-            console.error(error);
-        }
-    });
-})();
+        db.ensureIndex(options, (error) => {
+            if (error !== null) {
+                reject(error);
+                return;
+            }
 
-(async () => {
-    const db = await setUpDatabase();
-
-    // ドットで連結することで子ドキュメントのフィールドを指定できる
-    const options = {
-        fieldName: "developer.name"
-    };
-
-    db.ensureIndex(options, (error) => {
-        if (error !== null) {
-            console.error(error);
-        }
-    });
-})();
-
-(async () => {
-    const db = await setUpDatabase();
-
-    // uniqueにtrueを指定すると一意制約を設けることができる（デフォルトはfalse)
-    const options = {
-        fieldName: "name",
-        unique: true,
-    };
-
-    db.ensureIndex(options, (error) => {
-        if (error !== null) {
-            console.error(error);
-        }
-    });
-})();
-
-(async () => {
-    const db = await setUpDatabase();
-
-    const options = {
-        fieldName: "name"
-    };
-
-    db.ensureIndex(options, (error) => {
-        if (error !== null) {
-            console.error(error);
-        }
+            resolve();
+        });
     });
 
-    // removeIndex()を呼び出すことで作成済みインデックスを削除できる
-    db.removeIndex(options, (error) => {
-        if (error !== null) {
-            console.error(error);
-        }
+    await new Promise(async (resolve, reject) => {
+        const db = await setUpDatabase();
+
+        // ドットで連結することで子ドキュメントのフィールドを指定できる
+        const options = {
+            fieldName: "developer.name"
+        };
+
+        db.ensureIndex(options, (error) => {
+            if (error !== null) {
+                reject(error);
+                return;
+            }
+
+            resolve();
+        });
+    });
+
+    await new Promise(async (resolve, reject) => {
+        const db = await setUpDatabase();
+
+        // uniqueにtrueを指定すると一意制約を設けることができる（デフォルトはfalse)
+        const options = {
+            fieldName: "name",
+            unique: true,
+        };
+
+        db.ensureIndex(options, (error) => {
+            if (error !== null) {
+                reject(error);
+                return;
+            }
+
+            resolve();
+        });
+    });
+
+    await new Promise(async (resolve, reject) => {
+        const db = await setUpDatabase();
+
+        const options = {
+            fieldName: "name"
+        };
+
+        db.ensureIndex(options, (error) => {
+            if (error !== null) {
+                reject(error);
+                return;
+            }
+
+            // removeIndex()を呼び出すことで作成済みインデックスを削除できる
+            db.removeIndex(options, (error2) => {
+                if (error2 !== null) {
+                    reject(error2);
+                    return;
+                }
+
+                resolve();
+            });
+        });
     });
 })();
