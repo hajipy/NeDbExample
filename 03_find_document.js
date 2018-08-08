@@ -166,7 +166,7 @@ async function setUpDatabase() {
     await new Promise(async (resolve, reject) => {
         const db = await setUpDatabase();
 
-        // $le, $lte, $gt, $gteで比較条件が指定できる
+        // $lt, $lte, $gt, $gteで比較条件が指定できる
         db.find({ releaseDate: { $gte: new Date(2014, 1, 1) }}, (error, docs) => {
             if (error !== null) {
                 reject(error);
