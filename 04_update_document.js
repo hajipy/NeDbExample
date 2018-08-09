@@ -209,7 +209,7 @@ async function setUpDatabase() {
 
         const query = { _id: "id1" };
 
-        // updateに$unset modifierを指定した場合、そのフィールドの値をインクリメントし、それ以外のフィールドは以前のままになる
+        // updateに$inc modifierを指定した場合、そのフィールドの値をインクリメントし、それ以外のフィールドは以前のままになる
         const update = {
             $inc: { price: 10000 }
         };
